@@ -1,0 +1,7 @@
+﻿seed,policy,daily_completed,emergency_completed,passenger_trips,people_transferred,mean_dispatch_delay_s,resource_hold_s,yield_events,yield_s,cross_river_handoff_s,safety_failures
+42,fifo,23,5,2,8,20.51,483.7,3,19.1,501.7,0
+42,priority,23,5,2,8,16.6,673.75,1,3.25,494.65,0
+43,fifo,23,5,2,8,20.51,483.7,3,19.05,501.7,0
+43,priority,23,5,2,8,16.6,673.75,1,3.25,494.65,0
+44,fifo,23,5,2,8,20.51,483.7,3,19.05,501.7,0
+44,priority,23,5,2,8,16.6,641.75,1,3.25,478.35,0

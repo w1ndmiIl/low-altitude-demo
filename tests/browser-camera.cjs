@@ -1,0 +1,28 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{pathToFileURL}=require('node:url');
+const {chromium}=require(process.env.LOWAIR_PLAYWRIGHT_PACKAGE||'playwright');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'output/playwright');
+(async()=>{const browser=await chromium.launchPersistentContext(path.join(root,'.build','camera-check-'+process.pid),{executablePath:process.env.LOWAIR_CHROME||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,viewport:{width:1600,height:1100},args:['--no-sandbox','--disable-gpu','--enable-unsafe-swiftshader']});
+  try{const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(pathToFileURL(path.join(root,'demo/index.html')).href);await page.waitForFunction(()=>!!window.LowAirLab);await page.evaluate(()=>LowAirLab.setPlanningMode('periodic'));await page.locator('#mode').selectOption('operations');await page.waitForFunction(()=>!!window.LowAirLab?.city);await page.locator('#auto-events').uncheck();
+    const state=()=>page.evaluate(()=>{const c=LowAirLab.city;return {target:c.target.toArray(),yaw:c.yaw,phi:c.phi,radius:c.radius,mode:c.mode,time:LowAirLab.operations.time};});
+    async function drag(button='left'){const b=await page.locator('#city-canvas').boundingBox();await page.mouse.move(b.x+b.width*.45,b.y+b.height*.6);await page.mouse.down({button});await page.mouse.move(b.x+b.width*.45+120,b.y+b.height*.6+55,{steps:8});await page.mouse.up({button});}
+    const before=await state();assert.ok(await page.evaluate(()=>Math.abs(LowAirLab.operations.world.traffic.time-LowAirLab.operations.time)<1e-8));await drag();const pan=await state();assert.ok(Math.hypot(pan.target[0]-before.target[0],pan.target[2]-before.target[2])>150);assert.equal(pan.yaw,before.yaw);assert.equal(pan.time,before.time);assert.equal(await page.locator('#camera-mode').inputValue(),'manual');
+    await page.locator('#camera-rotate').click();const r0=await state();await drag();const r1=await state();assert.notEqual(r1.yaw,r0.yaw);assert.deepEqual(r1.target,r0.target);await drag('right');assert.notDeepEqual((await state()).target,r1.target);
+    await page.locator('#camera-mode').selectOption('follow');await page.waitForTimeout(400);await page.locator('#camera-pan').click();await drag();const free=await state();await page.waitForTimeout(300);assert.deepEqual((await state()).target,free.target);assert.equal(free.mode,'orbit');
+    await page.locator('#camera-reset').click();assert.deepEqual((await state()).target,[-350,80,-500]);assert.equal((await state()).time,before.time);
+    const b=await page.locator('#city-canvas').boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);const z0=(await state()).radius;await page.mouse.wheel(0,-200);await page.waitForTimeout(100);assert.ok((await state()).radius<z0);await page.locator('#city-canvas').focus();const k0=await state();await page.keyboard.press('ArrowRight');assert.notDeepEqual((await state()).target,k0.target);
+    await page.locator('#scene3d').screenshot({path:path.join(out,'camera-free-view.png')});
+    await page.locator('#view-2d').click();const map=await page.locator('#map').boundingBox(),mx=map.x+map.width*.5,my=map.y+map.height*.5;
+    const cell=()=>page.evaluate(([clientX,clientY])=>LowAirLab.mapView.hit({clientX,clientY}),[mx,my]);const hit0=await cell();await page.mouse.move(mx,my);await page.mouse.wheel(0,-350);await page.waitForTimeout(150);assert.deepEqual(await cell(),hit0);assert.ok(await page.evaluate(()=>LowAirLab.mapView.zoom>1));
+    await page.mouse.down();await page.mouse.move(mx+100,my+40,{steps:6});await page.mouse.up();assert.notDeepEqual(await cell(),hit0);await page.locator('#map-reset').click();assert.equal(await page.evaluate(()=>LowAirLab.mapView.zoom),1);assert.deepEqual(await page.evaluate(()=>LowAirLab.mapView.offset),{x:0,y:0});
+    await page.locator('#view-3d').click();await page.setViewportSize({width:390,height:844});await page.locator('#camera-pan').scrollIntoViewIfNeeded();assert.ok(await page.locator('#camera-pan').isVisible());assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    // 浏览器原生触摸输入：双指平移和缩放，保持模拟暂停。
+    await page.locator('#city-canvas').scrollIntoViewIfNeeded();const mobile=await page.locator('#city-canvas').boundingBox(),cx=mobile.x+mobile.width*.68,cy=mobile.y+mobile.height*.28,session=await page.context().newCDPSession(page),t0=await state();
+    const hit=await page.evaluate(([x,y])=>document.elementFromPoint(x,y)?.id,[cx,cy]);assert.equal(hit,'city-canvas','touch input must begin on unobstructed canvas');
+    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{id:1,x:cx-30,y:cy},{id:2,x:cx+30,y:cy}]});
+    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{id:1,x:cx-45,y:cy+30},{id:2,x:cx+65,y:cy+30}]});
+    await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(200);const t1=await state();assert.ok(t1.radius<t0.radius);assert.notDeepEqual(t1.target,t0.target);
+    await page.locator('#scene3d').screenshot({path:path.join(out,'camera-mobile.png')});assert.deepEqual(errors,[]);
+    fs.writeFileSync(path.join(out,'camera-browser-check.json'),JSON.stringify({passed:true,checks:['3D左拖平移','旋转模式','右拖平移','拖拽退出跟随且保持中心','恢复视角不重置任务','缩放','方向键平移','2D鼠标锚定缩放','2D拖动与恢复','窄屏控制按钮','原生双指平移/缩放'],errors},null,2));console.log('3D/2D视图操作检查通过。');
+  }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

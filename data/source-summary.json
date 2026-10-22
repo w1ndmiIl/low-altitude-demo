@@ -1,0 +1,12 @@
+{
+  "buildings": 822,
+  "roads": 945,
+  "tunnelRoadRecords": 56,
+  "buildingHeightsFromOSM": 550,
+  "buildingHeightsEstimated": 272,
+  "waters": 9,
+  "signals": 108,
+  "sourceSha256": "e90c014210672b6d645eb425a9f6e6d3cd5f27963c1d694f0bcc7e93fbe9028c",
+  "southBuildings": 782,
+  "northBuildingsSampled": 40
+}

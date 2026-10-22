@@ -1,0 +1,715 @@
+{
+  "schema": "lowair-mixed-experiments/v1",
+  "duration_s": 650,
+  "fleet": {
+    "uav": 16,
+    "helicopter": 2,
+    "evtol": 2
+  },
+  "scenario": "固定OSM地图、初始客运2单、15s人员转运、30s火情、45s物资救援、60s跨江医疗、90s中继，每100s增加日常需求",
+  "comparison": "FIFO同时使用任务创建顺序申请资源；priority使用应急优先和允许的日常抢占。该比较改变多项策略，不用于单独归因容量或让行收益。三个种子只改变心跳随机序列。",
+  "runs": [
+    {
+      "seed": 42,
+      "policy": "fifo",
+      "time_s": 650,
+      "fleet": 20,
+      "tasks_created": 29,
+      "daily_completed": 23,
+      "emergency_completed": 5,
+      "waiting": 0,
+      "preemptions": 0,
+      "mean_dispatch_delay_s": 20.51,
+      "mean_air_response_s": 176.3,
+      "cross_river_state": "RESOLVED",
+      "cross_river_air_s": 493.65,
+      "cross_river_ground_s": 278.15,
+      "cross_river_handoff_s": 501.7,
+      "distance_m": 41120.85,
+      "safety_failures": 0,
+      "min_fleet_separation_m": 20,
+      "composition": "mixed",
+      "uavs": 16,
+      "helicopters": 2,
+      "evtols": 2,
+      "passenger_trips": 2,
+      "people_transferred": 8,
+      "yield_events": 3,
+      "resource_hold_s": 483.7,
+      "yield_s": 19.1,
+      "incidents": [
+        {
+          "id": "E1",
+          "type": "evacuation",
+          "assigned_s": 0,
+          "arrival_s": 297.15,
+          "completed_s": 309.15,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E2",
+          "type": "fire",
+          "assigned_s": 19.55,
+          "arrival_s": 49.35,
+          "completed_s": 59.4,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E3",
+          "type": "rescue",
+          "assigned_s": 0,
+          "arrival_s": 6.05,
+          "completed_s": 16.1,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E4",
+          "type": "medical",
+          "assigned_s": 83,
+          "arrival_s": 493.65,
+          "completed_s": 501.7,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E5",
+          "type": "relay",
+          "assigned_s": 0,
+          "arrival_s": 35.3,
+          "completed_s": 80.3,
+          "status": "RESOLVED"
+        }
+      ],
+      "diagnostics": {
+        "dispatchCalls": 1312,
+        "pathSearches": 77,
+        "expandedNodes": 83368,
+        "unreachableRejected": 0,
+        "energyRejected": 8,
+        "assignments": 29,
+        "maxQueue": 16,
+        "capacityRejected": 0,
+        "typeRejected": 3911,
+        "resourceHoldSeconds": 483.7000000000757,
+        "yieldSeconds": 19.100000000000136,
+        "yieldEvents": 3,
+        "passengerTrips": 2,
+        "peopleTransferred": 8
+      },
+      "resources": [
+        {
+          "id": "south-port",
+          "name": "江南综合起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "north-port",
+          "name": "江北转运起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "south-rescue",
+          "name": "江南救援集结点",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "river-corridor",
+          "name": "跨江大型航空器航路",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        }
+      ]
+    },
+    {
+      "seed": 42,
+      "policy": "priority",
+      "time_s": 650,
+      "fleet": 20,
+      "tasks_created": 29,
+      "daily_completed": 23,
+      "emergency_completed": 5,
+      "waiting": 0,
+      "preemptions": 1,
+      "mean_dispatch_delay_s": 16.6,
+      "mean_air_response_s": 143.97,
+      "cross_river_state": "RESOLVED",
+      "cross_river_air_s": 486.6,
+      "cross_river_ground_s": 278.15,
+      "cross_river_handoff_s": 494.65,
+      "distance_m": 39898.99,
+      "safety_failures": 0,
+      "min_fleet_separation_m": 20,
+      "composition": "mixed",
+      "uavs": 16,
+      "helicopters": 2,
+      "evtols": 2,
+      "passenger_trips": 2,
+      "people_transferred": 8,
+      "yield_events": 1,
+      "resource_hold_s": 673.75,
+      "yield_s": 3.25,
+      "incidents": [
+        {
+          "id": "E1",
+          "type": "evacuation",
+          "assigned_s": 0,
+          "arrival_s": 183.75,
+          "completed_s": 195.75,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E2",
+          "type": "fire",
+          "assigned_s": 0,
+          "arrival_s": 8.25,
+          "completed_s": 18.3,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E3",
+          "type": "rescue",
+          "assigned_s": 0,
+          "arrival_s": 5.95,
+          "completed_s": 16,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E4",
+          "type": "medical",
+          "assigned_s": 83,
+          "arrival_s": 486.6,
+          "completed_s": 494.65,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E5",
+          "type": "relay",
+          "assigned_s": 0,
+          "arrival_s": 35.3,
+          "completed_s": 80.3,
+          "status": "RESOLVED"
+        }
+      ],
+      "diagnostics": {
+        "dispatchCalls": 1312,
+        "pathSearches": 309,
+        "expandedNodes": 962122,
+        "unreachableRejected": 38,
+        "energyRejected": 197,
+        "assignments": 30,
+        "maxQueue": 16,
+        "capacityRejected": 0,
+        "typeRejected": 8361,
+        "resourceHoldSeconds": 673.749999999935,
+        "yieldSeconds": 3.2499999999999964,
+        "yieldEvents": 1,
+        "passengerTrips": 2,
+        "peopleTransferred": 8
+      },
+      "resources": [
+        {
+          "id": "south-port",
+          "name": "江南综合起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "north-port",
+          "name": "江北转运起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "south-rescue",
+          "name": "江南救援集结点",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "river-corridor",
+          "name": "跨江大型航空器航路",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "policy": "fifo",
+      "time_s": 650,
+      "fleet": 20,
+      "tasks_created": 29,
+      "daily_completed": 23,
+      "emergency_completed": 5,
+      "waiting": 0,
+      "preemptions": 0,
+      "mean_dispatch_delay_s": 20.51,
+      "mean_air_response_s": 176.3,
+      "cross_river_state": "RESOLVED",
+      "cross_river_air_s": 493.65,
+      "cross_river_ground_s": 278.15,
+      "cross_river_handoff_s": 501.7,
+      "distance_m": 41170.05,
+      "safety_failures": 0,
+      "min_fleet_separation_m": 20,
+      "composition": "mixed",
+      "uavs": 16,
+      "helicopters": 2,
+      "evtols": 2,
+      "passenger_trips": 2,
+      "people_transferred": 8,
+      "yield_events": 3,
+      "resource_hold_s": 483.7,
+      "yield_s": 19.05,
+      "incidents": [
+        {
+          "id": "E1",
+          "type": "evacuation",
+          "assigned_s": 0,
+          "arrival_s": 297.15,
+          "completed_s": 309.15,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E2",
+          "type": "fire",
+          "assigned_s": 19.55,
+          "arrival_s": 49.35,
+          "completed_s": 59.4,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E3",
+          "type": "rescue",
+          "assigned_s": 0,
+          "arrival_s": 6.05,
+          "completed_s": 16.1,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E4",
+          "type": "medical",
+          "assigned_s": 83,
+          "arrival_s": 493.65,
+          "completed_s": 501.7,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E5",
+          "type": "relay",
+          "assigned_s": 0,
+          "arrival_s": 35.3,
+          "completed_s": 80.3,
+          "status": "RESOLVED"
+        }
+      ],
+      "diagnostics": {
+        "dispatchCalls": 1312,
+        "pathSearches": 77,
+        "expandedNodes": 83368,
+        "unreachableRejected": 0,
+        "energyRejected": 8,
+        "assignments": 29,
+        "maxQueue": 16,
+        "capacityRejected": 0,
+        "typeRejected": 3911,
+        "resourceHoldSeconds": 483.7000000000757,
+        "yieldSeconds": 19.050000000000136,
+        "yieldEvents": 3,
+        "passengerTrips": 2,
+        "peopleTransferred": 8
+      },
+      "resources": [
+        {
+          "id": "south-port",
+          "name": "江南综合起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "north-port",
+          "name": "江北转运起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "south-rescue",
+          "name": "江南救援集结点",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "river-corridor",
+          "name": "跨江大型航空器航路",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "policy": "priority",
+      "time_s": 650,
+      "fleet": 20,
+      "tasks_created": 29,
+      "daily_completed": 23,
+      "emergency_completed": 5,
+      "waiting": 0,
+      "preemptions": 1,
+      "mean_dispatch_delay_s": 16.6,
+      "mean_air_response_s": 143.97,
+      "cross_river_state": "RESOLVED",
+      "cross_river_air_s": 486.6,
+      "cross_river_ground_s": 278.15,
+      "cross_river_handoff_s": 494.65,
+      "distance_m": 39882.19,
+      "safety_failures": 0,
+      "min_fleet_separation_m": 20,
+      "composition": "mixed",
+      "uavs": 16,
+      "helicopters": 2,
+      "evtols": 2,
+      "passenger_trips": 2,
+      "people_transferred": 8,
+      "yield_events": 1,
+      "resource_hold_s": 673.75,
+      "yield_s": 3.25,
+      "incidents": [
+        {
+          "id": "E1",
+          "type": "evacuation",
+          "assigned_s": 0,
+          "arrival_s": 183.75,
+          "completed_s": 195.75,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E2",
+          "type": "fire",
+          "assigned_s": 0,
+          "arrival_s": 8.25,
+          "completed_s": 18.3,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E3",
+          "type": "rescue",
+          "assigned_s": 0,
+          "arrival_s": 5.95,
+          "completed_s": 16,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E4",
+          "type": "medical",
+          "assigned_s": 83,
+          "arrival_s": 486.6,
+          "completed_s": 494.65,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E5",
+          "type": "relay",
+          "assigned_s": 0,
+          "arrival_s": 35.3,
+          "completed_s": 80.3,
+          "status": "RESOLVED"
+        }
+      ],
+      "diagnostics": {
+        "dispatchCalls": 1312,
+        "pathSearches": 309,
+        "expandedNodes": 962122,
+        "unreachableRejected": 38,
+        "energyRejected": 197,
+        "assignments": 30,
+        "maxQueue": 16,
+        "capacityRejected": 0,
+        "typeRejected": 8361,
+        "resourceHoldSeconds": 673.749999999935,
+        "yieldSeconds": 3.2499999999999964,
+        "yieldEvents": 1,
+        "passengerTrips": 2,
+        "peopleTransferred": 8
+      },
+      "resources": [
+        {
+          "id": "south-port",
+          "name": "江南综合起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "north-port",
+          "name": "江北转运起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "south-rescue",
+          "name": "江南救援集结点",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "river-corridor",
+          "name": "跨江大型航空器航路",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        }
+      ]
+    },
+    {
+      "seed": 44,
+      "policy": "fifo",
+      "time_s": 650,
+      "fleet": 20,
+      "tasks_created": 29,
+      "daily_completed": 23,
+      "emergency_completed": 5,
+      "waiting": 0,
+      "preemptions": 0,
+      "mean_dispatch_delay_s": 20.51,
+      "mean_air_response_s": 176.3,
+      "cross_river_state": "RESOLVED",
+      "cross_river_air_s": 493.65,
+      "cross_river_ground_s": 278.15,
+      "cross_river_handoff_s": 501.7,
+      "distance_m": 41132.85,
+      "safety_failures": 0,
+      "min_fleet_separation_m": 20,
+      "composition": "mixed",
+      "uavs": 16,
+      "helicopters": 2,
+      "evtols": 2,
+      "passenger_trips": 2,
+      "people_transferred": 8,
+      "yield_events": 3,
+      "resource_hold_s": 483.7,
+      "yield_s": 19.05,
+      "incidents": [
+        {
+          "id": "E1",
+          "type": "evacuation",
+          "assigned_s": 0,
+          "arrival_s": 297.15,
+          "completed_s": 309.15,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E2",
+          "type": "fire",
+          "assigned_s": 19.55,
+          "arrival_s": 49.35,
+          "completed_s": 59.4,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E3",
+          "type": "rescue",
+          "assigned_s": 0,
+          "arrival_s": 6.05,
+          "completed_s": 16.1,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E4",
+          "type": "medical",
+          "assigned_s": 83,
+          "arrival_s": 493.65,
+          "completed_s": 501.7,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E5",
+          "type": "relay",
+          "assigned_s": 0,
+          "arrival_s": 35.3,
+          "completed_s": 80.3,
+          "status": "RESOLVED"
+        }
+      ],
+      "diagnostics": {
+        "dispatchCalls": 1312,
+        "pathSearches": 77,
+        "expandedNodes": 83368,
+        "unreachableRejected": 0,
+        "energyRejected": 8,
+        "assignments": 29,
+        "maxQueue": 16,
+        "capacityRejected": 0,
+        "typeRejected": 3911,
+        "resourceHoldSeconds": 483.7000000000757,
+        "yieldSeconds": 19.050000000000136,
+        "yieldEvents": 3,
+        "passengerTrips": 2,
+        "peopleTransferred": 8
+      },
+      "resources": [
+        {
+          "id": "south-port",
+          "name": "江南综合起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "north-port",
+          "name": "江北转运起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "south-rescue",
+          "name": "江南救援集结点",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "river-corridor",
+          "name": "跨江大型航空器航路",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        }
+      ]
+    },
+    {
+      "seed": 44,
+      "policy": "priority",
+      "time_s": 650,
+      "fleet": 20,
+      "tasks_created": 29,
+      "daily_completed": 23,
+      "emergency_completed": 5,
+      "waiting": 0,
+      "preemptions": 1,
+      "mean_dispatch_delay_s": 16.6,
+      "mean_air_response_s": 141.11,
+      "cross_river_state": "RESOLVED",
+      "cross_river_air_s": 470.3,
+      "cross_river_ground_s": 278.15,
+      "cross_river_handoff_s": 478.35,
+      "distance_m": 39920.89,
+      "safety_failures": 0,
+      "min_fleet_separation_m": 20,
+      "composition": "mixed",
+      "uavs": 16,
+      "helicopters": 2,
+      "evtols": 2,
+      "passenger_trips": 2,
+      "people_transferred": 8,
+      "yield_events": 1,
+      "resource_hold_s": 641.75,
+      "yield_s": 3.25,
+      "incidents": [
+        {
+          "id": "E1",
+          "type": "evacuation",
+          "assigned_s": 0,
+          "arrival_s": 185.75,
+          "completed_s": 197.75,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E2",
+          "type": "fire",
+          "assigned_s": 0,
+          "arrival_s": 8.25,
+          "completed_s": 18.3,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E3",
+          "type": "rescue",
+          "assigned_s": 0,
+          "arrival_s": 5.95,
+          "completed_s": 16,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E4",
+          "type": "medical",
+          "assigned_s": 83,
+          "arrival_s": 470.3,
+          "completed_s": 478.35,
+          "status": "RESOLVED"
+        },
+        {
+          "id": "E5",
+          "type": "relay",
+          "assigned_s": 0,
+          "arrival_s": 35.3,
+          "completed_s": 80.3,
+          "status": "RESOLVED"
+        }
+      ],
+      "diagnostics": {
+        "dispatchCalls": 1312,
+        "pathSearches": 309,
+        "expandedNodes": 962122,
+        "unreachableRejected": 38,
+        "energyRejected": 197,
+        "assignments": 30,
+        "maxQueue": 16,
+        "capacityRejected": 0,
+        "typeRejected": 8361,
+        "resourceHoldSeconds": 641.7499999999641,
+        "yieldSeconds": 3.2499999999999964,
+        "yieldEvents": 1,
+        "passengerTrips": 2,
+        "peopleTransferred": 8
+      },
+      "resources": [
+        {
+          "id": "south-port",
+          "name": "江南综合起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "north-port",
+          "name": "江北转运起降场",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "south-rescue",
+          "name": "江南救援集结点",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        },
+        {
+          "id": "river-corridor",
+          "name": "跨江大型航空器航路",
+          "capacity": 1,
+          "holders": [],
+          "waiting": []
+        }
+      ]
+    }
+  ]
+}

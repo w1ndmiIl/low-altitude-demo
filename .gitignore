@@ -1,0 +1,11 @@
+node_modules/
+.build/
+output/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
